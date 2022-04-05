@@ -1,6 +1,6 @@
 Name:		fermilab-conf_ssh
 Version:	1.0
-Release:	5%{?dist}
+Release:	6%{?dist}
 Summary:	Configure SSH for use with Fermilab
 
 Group:		Fermilab
@@ -11,7 +11,7 @@ BuildRequires:	coreutils
 BuildArch:	noarch
 
 Source0:	%{name}.tar.xz
-%if 0%{?rhel} < 9 && 0%{?fedora} <= 27
+%if 0%{?rhel} < 8 && 0%{?fedora} <= 27
 Source1:	fermilab-conf_ssh-server.sh
 %endif
 
@@ -41,9 +41,13 @@ The default behavior of openssh-client includes files from %{_sysconfdir}/ssh/ss
 Behavior from: CS-doc-1186
 
 %package server
-%if 0%{?rhel} >= 9 || 0%{?fedora} >= 31
+%if 0%{?rhel} >= 8 || 0%{?fedora} >= 27
 Summary:	Add Fermilab sshd_config to %{_sysconfdir}/ssh/ssh_config.d/
+%if 0%{?rhel} >= 9 || 0%{?fedora} >= 31
 Conflicts:	openssh-server < 8.2
+%else
+Conflicts:	openssh-server < 8.0p1-12
+%endif
 %else
 Summary:	Add Fermilab settings to %{_sysconfdir}/ssh/sshd_config
 Conflicts:	openssh-server < 6.1
@@ -78,7 +82,7 @@ Requirement from: CS-doc-1186
 %{__install} -D client/fermilab_ssh-client.conf %{buildroot}/%{_sysconfdir}/ssh/ssh_config.d/fermilab_ssh-client.conf
 
 # server
-%if 0%{?rhel} >= 9 || 0%{?fedora} >= 31
+%if 0%{?rhel} >= 8 || 0%{?fedora} >= 27
 %{__mkdir_p} %{buildroot}/etc/ssh/sshd_config.d/
 %{__cp} server/* %{buildroot}/etc/ssh/sshd_config.d/
 
@@ -284,7 +288,7 @@ systemctl condrestart sshd.service
 
 %files server
 %defattr(0644,root,root,0755)
-%if 0%{?rhel} >= 9 || 0%{?fedora} >= 31
+%if 0%{?rhel} >= 8 || 0%{?fedora} >= 27
 %config %attr(0600,root,root) /etc/ssh/sshd_config.d/*.conf
 %else
 %attr(0750,root,root) %{_libexecdir}/%{name}/%{name}.sh
@@ -308,5 +312,8 @@ exit 0
 
 #####################################################################
 %changelog
+* Tue Apr 5 2022 Pat Riehecky <riehecky@fnal.gov> 1.0-6
+- EL8.6 supports sshd includes, use those now
+
 * Wed Mar 16 2022 Pat Riehecky <riehecky@fnal.gov> 1.0-5
 - Repackage for public with subpackages
