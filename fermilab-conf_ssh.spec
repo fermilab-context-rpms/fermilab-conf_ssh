@@ -314,6 +314,7 @@ exit 0
 %changelog
 * Tue Apr 5 2022 Pat Riehecky <riehecky@fnal.gov> 1.0-6
 - EL8.6 supports sshd includes, use those now
+- New SSHD has stricter mask requirements, fix ULA mask
 
 * Wed Mar 16 2022 Pat Riehecky <riehecky@fnal.gov> 1.0-5
 - Repackage for public with subpackages
