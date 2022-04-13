@@ -1,6 +1,6 @@
 Name:		fermilab-conf_ssh
 Version:	1.0
-Release:	6.1%{?dist}
+Release:	6.2%{?dist}
 Summary:	Configure SSH for use with Fermilab
 
 Group:		Fermilab
@@ -313,8 +313,15 @@ exit 0
 %defattr(0644,root,root,0755)
 %config %{_sysconfdir}/ssh/ssh_config.d/fermilab_ssh-client.conf
 
+%files
+%defattr(0644,root,root,0755)
+
+
 #####################################################################
 %changelog
+* Wed Apr 13 2022 Pat Riehecky <riehecky@fnal.gov> 1.0-6.2
+- Add missing toplevel package
+
 * Wed Apr 13 2022 Pat Riehecky <riehecky@fnal.gov> 1.0-6.1
 - Use boolean conditional dependency for more rich behavior
 
