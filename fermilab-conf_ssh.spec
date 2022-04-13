@@ -1,6 +1,6 @@
 Name:		fermilab-conf_ssh
 Version:	1.0
-Release:	6%{?dist}
+Release:	6.1%{?dist}
 Summary:	Configure SSH for use with Fermilab
 
 Group:		Fermilab
@@ -13,6 +13,9 @@ BuildArch:	noarch
 Source0:	%{name}.tar.xz
 %if 0%{?rhel} < 8 && 0%{?fedora} <= 27
 Source1:	fermilab-conf_ssh-server.sh
+%else
+Requires:	(%{name}-client == %{version}-%{release} if openssh-clients)
+Requires:	(%{name}-server == %{version}-%{release} if openssh-server)
 %endif
 
 %description
@@ -312,6 +315,9 @@ exit 0
 
 #####################################################################
 %changelog
+* Wed Apr 13 2022 Pat Riehecky <riehecky@fnal.gov> 1.0-6.1
+- Use boolean conditional dependency for more rich behavior
+
 * Tue Apr 5 2022 Pat Riehecky <riehecky@fnal.gov> 1.0-6
 - EL8.6 supports sshd includes, use those now
 - New SSHD has stricter mask requirements, fix ULA mask
