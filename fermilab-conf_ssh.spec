@@ -1,6 +1,6 @@
 Name:		fermilab-conf_ssh
-Version:	1.0
-Release:	7%{?dist}
+Version:	1.1
+Release:	1%{?dist}
 Summary:	Configure SSH for use with Fermilab
 
 Group:		Fermilab
@@ -319,6 +319,9 @@ exit 0
 
 #####################################################################
 %changelog
+* Mon Oct 7 2024 Pat Riehecky <riehecky@fnal.gov> 1.1-1
+- Users now need to specifically configure ExposeAuthInfo
+
 * Mon May 9 2022 Pat Riehecky <riehecky@fnal.gov> 1.0-7
 - EL9 anaconda lets you set root login, don't override it
 
