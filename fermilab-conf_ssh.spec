@@ -1,5 +1,5 @@
 Name:		fermilab-conf_ssh
-Version:	1.1
+Version:	1.2
 Release:	1%{?dist}
 Summary:	Configure SSH for use with Fermilab
 
@@ -43,6 +43,21 @@ The default behavior of openssh-client includes files from %{_sysconfdir}/ssh/ss
 
 Behavior from: CS-doc-1186
 
+%package client-delegate-all
+Summary:        Add rule to always delegate GSSAPI ssh_config to %{_sysconfdir}/ssh/ssh_config.d/
+Requires:       openssh-clients > 7.8
+Requires(post): policycoreutils coreutils grep
+%if 0%{?rhel} >= 8 || 0%{?fedora} >= 27
+Recommends:     krb5-workstation
+%endif
+
+%description client-delegate-all
+The Fermilab configuration for openssh-client may not forward credentials in some situations.
+This package adds a setting to always delegate GSSAPI credentials to any host.
+
+The default behavior of openssh-client includes files from %{_sysconfdir}/ssh/ssh_config.d/*.conf
+
+
 %package server
 %if 0%{?rhel} >= 8 || 0%{?fedora} >= 27
 Summary:	Add Fermilab sshd_config to %{_sysconfdir}/ssh/ssh_config.d/
@@ -83,6 +98,9 @@ Requirement from: CS-doc-1186
 
 # client
 %{__install} -D client/fermilab_ssh-client.conf %{buildroot}/%{_sysconfdir}/ssh/ssh_config.d/fermilab_ssh-client.conf
+
+# client-delegate-all
+%{__install} -D client/fermilab_ssh-client-delegate-all.conf %{buildroot}/%{_sysconfdir}/ssh/ssh_config.d/fermilab_ssh-client-delegate-all.conf
 
 # server
 %if 0%{?rhel} >= 8 || 0%{?fedora} >= 27
@@ -313,12 +331,19 @@ exit 0
 %defattr(0644,root,root,0755)
 %config %{_sysconfdir}/ssh/ssh_config.d/fermilab_ssh-client.conf
 
+%files client-delegate-all
+%defattr(0644,root,root,0755)
+%config %{_sysconfdir}/ssh/ssh_config.d/fermilab_ssh-client-delegate-all.conf
+
 %files
 %defattr(0644,root,root,0755)
 
 
 #####################################################################
 %changelog
+* Fri Apr 25 2025 Pat Riehecky <riehecky@fnal.gov> 1.2-1
+- Add package for client-delegate-all
+
 * Mon Oct 7 2024 Pat Riehecky <riehecky@fnal.gov> 1.1-1
 - Users now need to specifically configure ExposeAuthInfo
 
